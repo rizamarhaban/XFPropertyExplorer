@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="PropertyExplorerDemo.Controls.PropertyExplorer"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:canvas="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+    xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
+    xmlns:controls="clr-namespace:PropertyExplorerDemo.Controls"
+    xmlns:fontawesome="clr-namespace:FontAwesome"
+    xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+                <Setter Property="TextColor" Value="Red" />
+            </Style>
+
+            <DataTemplate x:Key="colorPropertyTemplate">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackLayout Grid.Column="0" Orientation="Horizontal">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1.8*" />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Grid.Column="0"
+                                Text="{x:Binding PropertyName}"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Column="1"
+                                HorizontalOptions="Start"
+                                Text="" />
+                        </Grid>
+                    </StackLayout>
+                    <colorpicker:ColorWheel
+                        x:Name="colorPicker"
+                        Grid.Row="1"
+                        Padding="25,0,25,0"
+                        IsVisible="True"
+                        ShowAlphaSlider="True"
+                        ShowLuminositySlider="True"
+                        ShowLuminosityWheel="True"
+                        Vertical="True" />
+                </Grid>
+
+            </DataTemplate>
+            <DataTemplate x:Key="dateTimePropertyTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1.8*" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        Text="{x:Binding PropertyName}"
+                        VerticalOptions="Center" />
+                    <DatePicker
+                        Grid.Column="1"
+                        Date="{x:Binding PropertyValue}"
+                        HorizontalOptions="Start" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="booleanPropertyTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1.8*" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        Text="{x:Binding PropertyName}"
+                        VerticalOptions="Center" />
+                    <CheckBox Grid.Column="1" IsChecked="{x:Binding PropertyValue}" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="textPropertyTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1.8*" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        Text="{x:Binding PropertyName}"
+                        VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Text="{x:Binding PropertyValue}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior Command="{Binding UpdatedCommand}" EventName="Unfocused" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="numericPropertyTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1.8*" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        Text="{x:Binding PropertyName}"
+                        VerticalOptions="Center" />
+                    <Entry
+                        Grid.Column="1"
+                        Keyboard="Numeric"
+                        Text="{x:Binding PropertyValue}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior Command="{Binding UpdatedCommand}" EventName="Unfocused" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="thicknessPropertyTemplate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1.8*" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        Text="{x:Binding PropertyName}"
+                        VerticalOptions="Start">
+                        <Label.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <OnPlatform.Platforms>
+                                    <On Platform="iOS" Value="0,5,0,0" />
+                                    <On Platform="Android" Value="0,10,0,0" />
+                                    <On Platform="UWP" Value="0,2,0,0" />
+                                </OnPlatform.Platforms>
+                            </OnPlatform>
+                        </Label.Margin>
+                    </Label>
+                    <Grid Grid.Column="1" ColumnSpacing="25">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackLayout
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                FontFamily="{StaticResource FontAwesomeSolid}"
+                                FontSize="Medium"
+                                Text="{x:Static fontawesome:FontAwesomeIcons.ArrowLeft}"
+                                VerticalOptions="Center" />
+                            <Entry
+                                HorizontalTextAlignment="Center"
+                                Keyboard="Numeric"
+                                Text="{x:Binding PropertyValue.Left}"
+                                WidthRequest="80">
+                                <Entry.Behaviors>
+                                    <toolkit:EventToCommandBehavior Command="{Binding UpdatedCommand}" EventName="Unfocused" />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </StackLayout>
+                        <StackLayout
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Orientation="Horizontal">
+                            <Label
+                                FontFamily="{StaticResource FontAwesomeSolid}"
+                                FontSize="Medium"
+                                Text="{x:Static fontawesome:FontAwesomeIcons.ArrowUp}"
+                                VerticalOptions="Center" />
+                            <Entry
+                                HorizontalTextAlignment="Center"
+                                Keyboard="Numeric"
+                                Text="{x:Binding PropertyValue.Top}"
+                                WidthRequest="80">
+                                <Entry.Behaviors>
+                                    <toolkit:EventToCommandBehavior Command="{Binding UpdatedCommand}" EventName="Unfocused" />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </StackLayout>
+                        <StackLayout
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                FontFamily="{StaticResource FontAwesomeSolid}"
+                                FontSize="Medium"
+                                Text="{x:Static fontawesome:FontAwesomeIcons.ArrowRight}"
+                                VerticalOptions="Center" />
+                            <Entry
+                                HorizontalTextAlignment="Center"
+                                Keyboard="Numeric"
+                                Text="{x:Binding PropertyValue.Right}"
+                                WidthRequest="80">
+                                <Entry.Behaviors>
+                                    <toolkit:EventToCommandBehavior Command="{Binding UpdatedCommand}" EventName="Unfocused" />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </StackLayout>
+                        <StackLayout
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Orientation="Horizontal">
+                            <Label
+                                FontFamily="{StaticResource FontAwesomeSolid}"
+                                FontSize="Medium"
+                                Text="{x:Static fontawesome:FontAwesomeIcons.ArrowDown}"
+                                VerticalOptions="Center" />
+                            <Entry
+                                HorizontalTextAlignment="Center"
+                                Keyboard="Numeric"
+                                Text="{x:Binding PropertyValue.Bottom}"
+                                WidthRequest="80">
+                                <Entry.Behaviors>
+                                    <toolkit:EventToCommandBehavior Command="{Binding UpdatedCommand}" EventName="Unfocused" />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </StackLayout>
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+            <controls:PropertyTemplateSelector
+                x:Key="propertyTemplateSelector"
+                BooleanPropertyTemplate="{StaticResource booleanPropertyTemplate}"
+                ColorPropertyTemplate="{StaticResource colorPropertyTemplate}"
+                DateTimePropertyTemplate="{StaticResource dateTimePropertyTemplate}"
+                NumericPropertyTemplate="{StaticResource numericPropertyTemplate}"
+                TextPropertyTemplate="{StaticResource textPropertyTemplate}"
+                ThicknessPropertyTemplate="{StaticResource thicknessPropertyTemplate}" />
+
+            <DataTemplate x:Key="categoryTemplate" x:DataType="controls:PropertyGroupItems">
+                <toolkit:Expander
+                    Padding="5"
+                    CollapseAnimationEasing="{x:Static Easing.CubicOut}"
+                    CollapseAnimationLength="100"
+                    ExpandAnimationEasing="{x:Static Easing.CubicIn}"
+                    ExpandAnimationLength="100"
+                    IsExpanded="{x:Binding IsExpanded}">
+                    <toolkit:Expander.Header>
+                        <Frame Padding="10" CornerRadius="0" BorderColor="#000000">
+                            <Grid>
+                                <Label FontSize="Body" Text="{x:Binding Header}" />
+                                <Path
+                                    x:Name="expanderArrow"
+                                    Margin="0,0,3,-2"
+                                    Aspect="Uniform"
+                                    Data="{x:Binding ArrowHead}"
+                                    HeightRequest="18"
+                                    HorizontalOptions="End"
+                                    Stroke="{Static SolidColorBrush.Gray}"
+                                    WidthRequest="18" />
+                            </Grid>
+                        </Frame>
+                    </toolkit:Expander.Header>
+                    <toolkit:Expander.Content>
+                        <Frame
+                            Padding="10,5,10,10"
+                            CornerRadius="0"
+                            VerticalOptions="Start">
+                            <StackLayout
+                                BindableLayout.ItemTemplateSelector="{StaticResource propertyTemplateSelector}"
+                                BindableLayout.ItemsSource="{x:Binding Properties}"
+                                Spacing="2" />
+                        </Frame>
+                    </toolkit:Expander.Content>
+                </toolkit:Expander>
+            </DataTemplate>
+            <DataTemplate x:Key="sortingTemplate" x:DataType="controls:PropertySortingItems">
+                <Frame
+                    Padding="10,5,10,10"
+                    CornerRadius="0"
+                    VerticalOptions="Start">
+                    <StackLayout
+                        BindableLayout.ItemTemplateSelector="{StaticResource propertyTemplateSelector}"
+                        BindableLayout.ItemsSource="{x:Binding Properties}"
+                        Spacing="2" />
+                </Frame>
+            </DataTemplate>
+            <controls:ArrangedTemplateSelector
+                x:Key="arrangedTemplateSelector"
+                CategoryTemplate="{StaticResource categoryTemplate}"
+                SortingTemplate="{StaticResource sortingTemplate}" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <ContentView.Content>
+        <StackLayout>
+            <Frame
+                Padding="7,5,7,5"
+                BackgroundColor="LightSteelBlue"
+                CornerRadius="0">
+                <Label
+                    x:Name="lblTitle"
+                    FontSize="Medium"
+                    TextColor="#404040" />
+            </Frame>
+            <StackLayout
+                Padding="7,2,5,10"
+                Orientation="Horizontal"
+                Spacing="20">
+                <Label FontSize="Medium" Text="Type" />
+                <Label x:Name="lblComponentType" FontSize="Medium" />
+            </StackLayout>
+            <Picker
+                x:Name="pickerArranged"
+                Title="Arranged by"
+                BackgroundColor="Transparent">
+                <Picker.Items>
+                    <x:String>Sorting</x:String>
+                    <x:String>Category</x:String>
+                </Picker.Items>
+            </Picker>
+            <SearchBar x:Name="searchBar" Placeholder="Search items..." />
+            <CollectionView
+                x:Name="cvList"
+                ItemTemplate="{StaticResource arrangedTemplateSelector}"
+                VerticalOptions="StartAndExpand">
+                <CollectionView.EmptyView>
+                    <Label
+                        HorizontalTextAlignment="Center"
+                        Text="No properties"
+                        VerticalTextAlignment="Center" />
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

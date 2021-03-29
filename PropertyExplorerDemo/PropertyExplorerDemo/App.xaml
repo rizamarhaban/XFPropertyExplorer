@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application
+    x:Class="PropertyExplorerDemo.App"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:PropertyExplorerDemo.Controls"
+    xmlns:converters="clr-namespace:PropertyExplorerDemo.Converters">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <converters:ColorToHexConverter x:Key="ColorToHexConverter" />
+
+            <OnPlatform x:Key="FontAwesomeBrands" x:TypeArguments="x:String">
+                <On Platform="Android" Value="FontAwesome5Brands.otf#Regular" />
+                <On Platform="iOS" Value="FontAwesome5Brands-Regular" />
+                <On Platform="UWP" Value="/Assets/FontAwesome5Brands.otf#Font Awesome 5 Brands" />
+            </OnPlatform>
+
+            <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
+                <On Platform="Android" Value="FontAwesome5Solid.otf#Regular" />
+                <On Platform="iOS" Value="FontAwesome5Free-Solid" />
+                <On Platform="UWP" Value="/Assets/FontAwesome5Solid.otf#Font Awesome 5 Free" />
+            </OnPlatform>
+
+            <OnPlatform x:Key="FontAwesomeRegular" x:TypeArguments="x:String">
+                <On Platform="Android" Value="FontAwesome5Regular.otf#Regular" />
+                <On Platform="iOS" Value="FontAwesome5Free-Regular" />
+                <On Platform="UWP" Value="/Assets/FontAwesome5Regular.otf#Font Awesome 5 Free" />
+            </OnPlatform>
+
+            <Style TargetType="controls:GridSplitter">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="ControlTemplate">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid HeightRequest="20">
+                                <StackLayout
+                                    Padding="2"
+                                    HorizontalOptions="Center"
+                                    Spacing="2"
+                                    VerticalOptions="Center"
+                                    WidthRequest="10">
+                                    <BoxView BackgroundColor="#FF868686" HeightRequest="1" />
+                                    <BoxView BackgroundColor="#FF868686" HeightRequest="1" />
+                                </StackLayout>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+                <Style.Triggers>
+                    <Trigger TargetType="controls:GridSplitter" Property="VerticalOptions" Value="Fill">
+                        <Setter Property="ControlTemplate">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Grid WidthRequest="20">
+                                        <StackLayout
+                                            Padding="2"
+                                            HeightRequest="10"
+                                            HorizontalOptions="Center"
+                                            Orientation="Horizontal"
+                                            Spacing="2"
+                                            VerticalOptions="Center">
+                                            <BoxView BackgroundColor="#FF868686" WidthRequest="1" />
+                                            <BoxView BackgroundColor="#FF868686" WidthRequest="1" />
+                                        </StackLayout>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

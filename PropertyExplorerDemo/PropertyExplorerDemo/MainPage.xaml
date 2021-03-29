@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PropertyExplorerDemo.MainPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:PropertyExplorerDemo.Controls"
+    xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:vm="clr-namespace:PropertyExplorerDemo.ViewModels">
+
+    <ContentPage.BindingContext>
+        <vm:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <!--  This is for testing if using GriSplitter  -->
+
+    <!--<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <controls:GridSplitter Grid.Column="1" HorizontalOptions="Center" />
+    </Grid>-->
+
+    <StackLayout>
+        <controls:PropertyExplorer
+            Title="Properties"
+            Grid.Column="2"
+            MinimumWidthRequest="40"
+            SourceObject="{x:Binding Source}"
+            VerticalOptions="Start" />
+
+        <vm:Activity
+            BackgroundColor="Red"
+            HeightRequest="20"
+            VerticalOptions="Start" />
+    </StackLayout>
+
+</ContentPage>
